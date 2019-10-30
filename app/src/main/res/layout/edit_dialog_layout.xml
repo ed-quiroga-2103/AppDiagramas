@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@drawable/customborder">
 
@@ -10,34 +10,100 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:textSize="20dp"
         android:text="Nueva Carga Puntual"
         android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/puntualEdit"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/puntualText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:hint="Escriba el valor acá"
-        android:textAlignment="center"
-        android:inputType="phone"/>
+        android:id="@+id/xLayout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Posición X:"
+            android:layout_marginTop="20dp"
+            android:id="@+id/xText"
+            android:layout_toLeftOf="@+id/xEdit"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="10sp"
+            android:textSize="17dp"
+            android:singleLine="true"
+            />
+
+        <EditText
+            android:id="@+id/xEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Escriba el valor acá"
+            android:textAlignment="center"
+            android:inputType="phone"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="10sp"
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/xLayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/yLayout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fuerza:"
+            android:layout_marginTop="20dp"
+            android:id="@+id/yText"
+            android:layout_toLeftOf="@+id/yEdit"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="10sp"
+            android:textSize="17dp"
+            android:singleLine="true"
+            />
+
+        <EditText
+            android:id="@+id/yEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Escriba el valor acá"
+            android:textAlignment="center"
+            android:inputType="phone"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="10sp"
+            />
+
+    </RelativeLayout>
+
+
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/puntualEdit"
+        android:layout_below="@+id/yLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp">
 
-    <Button
-        android:layout_toRightOf="@+id/deletePuntual"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Modificar"
-        android:id="@+id/editPuntual"
-        />
+        <Button
+            android:layout_toRightOf="@+id/deletePuntual"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modificar"
+            android:id="@+id/editPuntual"
+            />
         <Button
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
@@ -49,5 +115,5 @@
 
     </RelativeLayout>
 
-
 </RelativeLayout>
+
