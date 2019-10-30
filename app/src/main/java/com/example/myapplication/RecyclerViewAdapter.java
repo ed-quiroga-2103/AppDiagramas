@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -29,15 +30,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mImageNames = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<String> mxVals = new ArrayList<>();
+    private ArrayList<String> myVals = new ArrayList<>();
     private Context mContext;
-    private EditText edit;
+    private EditText xEdit;
+    private EditText yEdit;
     private MainActivity mMain;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, MainActivity main) {
-        mImageNames = imageNames;
-        mImages = images;
+    public RecyclerViewAdapter(Context context, ArrayList<String> xVals, ArrayList<String> yVals, MainActivity main) {
+        mxVals = xVals;
+        myVals = yVals;
         mContext = context;
         mMain = main;
     }
@@ -50,33 +52,65 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        holder.image.setImageResource(R.mipmap.ic_launcher);
 
-        holder.imageName.setText(mImageNames.get(position));
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.xVal.setText(mxVals.get(position));
+        holder.yVal.setText(myVals.get(position));
+
+
+        if(Integer.valueOf(holder.yVal.getText().toString()) < 0){
+
+            holder.image.setImageResource(R.drawable.ic_arrow_down);
+
+        }
+        else {
+
+            holder.image.setImageResource(R.drawable.ic_arrow_up);
+
+        }
+
+
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(view.getContext());
                 dialog.setContentView(R.layout.edit_dialog_layout);
 
                 Button editButton = dialog.findViewById(R.id.editPuntual);
-                edit = dialog.findViewById(R.id.puntualEdit);
+                xEdit = dialog.findViewById(R.id.xEdit);
+                yEdit = dialog.findViewById(R.id.yEdit);
+
+
+                xEdit.setText(mxVals.get(position));
+                yEdit.setText(myVals.get(position));
+
+
+
+                Window window = dialog.getWindow();
+                window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if(edit.getText().toString().isEmpty()){
-                            edit.setHint("Por favor agregue un valor válido");
+                        if(xEdit.getText().toString().isEmpty()){
+                            xEdit.setHint("Por favor agregue un valor válido");
+                            return;
+
+                        }
+                        if(yEdit.getText().toString().isEmpty()){
+                            yEdit.setHint("Por favor agregue un valor válido");
                             return;
 
                         }
 
-                        mImageNames.set(position, edit.getText().toString());
 
+                        mxVals.set(position, xEdit.getText().toString());
+                        myVals.set(position, yEdit.getText().toString());
                         mMain.initRecyclerView();
                         dialog.cancel();
 
@@ -88,7 +122,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mImageNames.remove(position);
+                        mxVals.remove(position);
+                        myVals.remove(position);
                         mMain.initRecyclerView();
                         dialog.cancel();
                     }
@@ -103,20 +138,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mImageNames.size();
+        return mxVals.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CircleImageView image;
-        TextView imageName;
+        TextView xVal;
+        TextView yVal;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
-            imageName = itemView.findViewById(R.id.image_name);
+            xVal = itemView.findViewById(R.id.xVal);
+            yVal = itemView.findViewById(R.id.yVal);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
