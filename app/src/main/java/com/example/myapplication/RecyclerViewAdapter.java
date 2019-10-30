@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,11 +32,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mImageNames = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
     private Context mContext;
+    private EditText edit;
+    private MainActivity mMain;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images ) {
+    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, MainActivity main) {
         mImageNames = imageNames;
         mImages = images;
         mContext = context;
+        mMain = main;
     }
 
     @Override
@@ -47,24 +53,50 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        Glide.with(mContext)
-                .asBitmap()
-                .load(mImages.get(position))
-                .into(holder.image);
+        holder.image.setImageResource(R.mipmap.ic_launcher);
 
         holder.imageName.setText(mImageNames.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
+                final Dialog dialog = new Dialog(view.getContext());
+                dialog.setContentView(R.layout.edit_dialog_layout);
 
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Button editButton = dialog.findViewById(R.id.editPuntual);
+                edit = dialog.findViewById(R.id.puntualEdit);
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                Intent intent = new Intent(mContext, GalleryActivity.class);
-                intent.putExtra("image_url", mImages.get(position));
-                intent.putExtra("image_name", mImageNames.get(position));
-                mContext.startActivity(intent);
+                        if(edit.getText().toString().isEmpty()){
+                            edit.setHint("Por favor agregue un valor válido");
+                            return;
+
+                        }
+
+                        mImageNames.set(position, edit.getText().toString());
+
+                        mMain.initRecyclerView();
+                        dialog.cancel();
+
+                    }
+                });
+
+                Button deleteButton = dialog.findViewById(R.id.deletePuntual);
+
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mImageNames.remove(position);
+                        mMain.initRecyclerView();
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+
+
             }
         });
     }
