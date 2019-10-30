@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     //vars
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-
+    private static ArrayList<String> mNames = new ArrayList<>();
+    private static ArrayList<String> mImageUrls = new ArrayList<>();
+    private EditText edit;
     //UI
 
     private FloatingActionButton fab_main, fab1_mail, fab2_share;
@@ -83,17 +86,54 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(getApplicationContext(), "Share", Toast.LENGTH_SHORT).show();
-
+                textview_mail.startAnimation(fab_close);
+                textview_share.startAnimation(fab_close);
+                fab2_share.startAnimation(fab_close);
+                fab1_mail.startAnimation(fab_close);
+                fab_main.startAnimation(fab_anticlock);
+                fab2_share.setClickable(false);
+                fab1_mail.setClickable(false);
+                isOpen = false;
             }
         });
 
         fab1_mail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Email", Toast.LENGTH_SHORT).show();
 
+                textview_mail.startAnimation(fab_close);
+                textview_share.startAnimation(fab_close);
+                fab2_share.startAnimation(fab_close);
+                fab1_mail.startAnimation(fab_close);
+                fab_main.startAnimation(fab_anticlock);
+                fab2_share.setClickable(false);
+                fab1_mail.setClickable(false);
+                isOpen = false;
 
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.add_dialog_layout);
+
+                Button addButton = dialog.findViewById(R.id.puntualButton);
+                edit = dialog.findViewById(R.id.puntualEdit);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(edit.getText().toString().isEmpty()){
+
+                            edit.setHint("Por favor agregue un valor válido");
+                            return;
+
+                        }
+
+                        mNames.add(edit.getText().toString());
+                        initRecyclerView();
+                        dialog.cancel();
+
+                    }
+                });
+
+                dialog.show();
 
 
             }
@@ -102,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initRecyclerView(){
+    public void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

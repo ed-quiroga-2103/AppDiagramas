@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/customborder">
+
+    <TextView
+        android:id="@+id/puntualText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Nueva Carga Puntual"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/puntualEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/puntualText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="Escriba el valor acá"
+        android:textAlignment="center"
+        android:inputType="phone"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/puntualEdit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp">
+
+    <Button
+        android:layout_toRightOf="@+id/deletePuntual"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modificar"
+        android:id="@+id/editPuntual"
+        />
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:id="@+id/deletePuntual"/>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
