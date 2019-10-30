@@ -53,11 +53,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        holder.image.setImageResource(R.mipmap.ic_launcher);
+
 
         holder.imageName.setText(mImageNames.get(position));
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+
+        if(Integer.valueOf(holder.imageName.getText().toString()) < 0){
+
+            holder.image.setImageResource(R.drawable.ic_arrow_down);
+
+        }
+        else {
+
+            holder.image.setImageResource(R.drawable.ic_arrow_up);
+
+        }
+
+
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(view.getContext());

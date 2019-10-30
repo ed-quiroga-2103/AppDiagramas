@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.graph.GraphActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -94,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
                 fab2_share.setClickable(false);
                 fab1_mail.setClickable(false);
                 isOpen = false;
+
+                Intent intent = new Intent(MainActivity.this, GraphActivity.class);
+                intent.putExtra("values", mNames);
+                startActivity(intent);
+
+
             }
         });
 
