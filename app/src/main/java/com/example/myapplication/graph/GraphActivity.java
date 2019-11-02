@@ -5,6 +5,8 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,8 @@ public class GraphActivity extends AppCompatActivity {
     private static final String TAG = "GraphActivity";
 
 
+    String equations = "";
+
     double xMax = 0;
     double xMin = 0;
     double yMax = 0;
@@ -35,11 +39,16 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graph_activity_layout);
 
+
         Intent intent = getIntent();
         String values = intent.getStringExtra("values");
+        equations = intent.getStringExtra("equations");
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<ValHolder>>(){}.getType();
         ArrayList<ValHolder> ValHolders = gson.fromJson(values, type);
+
+        Log.d(TAG, equations);
+
 
 
         LineGraphSeries <DataPoint> series = new LineGraphSeries<>();
@@ -86,6 +95,25 @@ public class GraphActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             Toast.makeText(GraphActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+        Button button = findViewById(R.id.ecuaciones);
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(GraphActivity.this, EquationActivity.class);
+
+                intent.putExtra("equations", equations);
+
+
+                startActivity(intent);
+
+            }
+        });
+
+
 
     }
 

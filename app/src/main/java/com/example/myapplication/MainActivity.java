@@ -15,10 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.graph.GraphActivity;
+import com.example.myapplication.structures.EquationHolder;
 import com.example.myapplication.structures.ValHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -37,29 +39,49 @@ public class MainActivity extends AppCompatActivity {
     //UI
     private EditText xEdit;
     private EditText yEdit;
-    private FloatingActionButton fab_main, fab1_mail, fab2_share;
+    private FloatingActionButton fab_main, fab1_mail, fab2_share, fab3_flect, fab4;
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
-    TextView textview_mail, textview_share;
+    TextView textview_mail, textview_share, text3, text4;
 
+
+    Integer beamSize = 0;
     Boolean isOpen = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        xVals.add("2");
+        xVals.add("4");
+        xVals.add("6");
+
+        yVals.add("10");
+        yVals.add("-20");
+        yVals.add("40");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         Log.d(TAG, "onCreate: started.");
         fab_main = findViewById(R.id.fab);
         fab1_mail = findViewById(R.id.fab1);
         fab2_share = findViewById(R.id.fab2);
+        fab3_flect = findViewById(R.id.fab3);
+        fab4 = findViewById(R.id.fab4);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clock);
         fab_anticlock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_anticlock);
 
-        textview_mail = (TextView) findViewById(R.id.textview_mail);
-        textview_share = (TextView) findViewById(R.id.textview_share);
+        textview_mail = findViewById(R.id.textview_mail);
+        textview_share = findViewById(R.id.textview_share);
+        text3 = findViewById(R.id.textview_share3);
+        text4 = findViewById(R.id.textview_mail2);
 
         fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +94,14 @@ public class MainActivity extends AppCompatActivity {
                     fab2_share.startAnimation(fab_close);
                     fab1_mail.startAnimation(fab_close);
                     fab_main.startAnimation(fab_anticlock);
+                    fab3_flect.startAnimation(fab_close);
+                    text3.startAnimation(fab_close);
                     fab2_share.setClickable(false);
                     fab1_mail.setClickable(false);
+                    fab3_flect.setClickable(false);
+                    text4.startAnimation(fab_close);
+                    fab4.startAnimation(fab_close);
+                    fab4.setClickable(false);
                     isOpen = false;
                 } else {
                     textview_mail.startAnimation(fab_open);
@@ -81,14 +109,58 @@ public class MainActivity extends AppCompatActivity {
                     fab2_share.startAnimation(fab_open);
                     fab1_mail.startAnimation(fab_open);
                     fab_main.startAnimation(fab_clock);
+                    fab3_flect.startAnimation(fab_open);
+                    text3.startAnimation(fab_open);
                     fab2_share.setClickable(true);
                     fab1_mail.setClickable(true);
+                    fab3_flect.setClickable(true);
+                    fab4.startAnimation(fab_open);
+                    text4.startAnimation(fab_open);
+                    fab4.setClickable(true);
                     isOpen = true;
                 }
 
             }
         });
 
+
+        fab3_flect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                textview_mail.startAnimation(fab_close);
+                textview_share.startAnimation(fab_close);
+                fab2_share.startAnimation(fab_close);
+                fab1_mail.startAnimation(fab_close);
+                fab_main.startAnimation(fab_anticlock);
+                fab2_share.setClickable(false);
+                fab1_mail.setClickable(false);
+                fab3_flect.setClickable(false);
+                fab3_flect.startAnimation(fab_close);
+                text3.startAnimation(fab_close);
+                text4.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab4.setClickable(false);
+                isOpen = false;
+
+                Intent intent = new Intent(MainActivity.this, GraphActivity.class);
+
+
+                String jsonVals = new Gson().toJson(getSecondPlottingHolders(8));
+
+                String jsonEq = new Gson().toJson(getEquations2(8));
+
+                intent.putExtra("values", jsonVals);
+                intent.putExtra("equations", jsonEq);
+
+
+                Log.d(TAG, jsonEq);
+
+                startActivity(intent);
+
+
+            }
+        });
 
         fab2_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +173,14 @@ public class MainActivity extends AppCompatActivity {
                 fab_main.startAnimation(fab_anticlock);
                 fab2_share.setClickable(false);
                 fab1_mail.setClickable(false);
+                fab3_flect.setClickable(false);
+                fab3_flect.startAnimation(fab_close);
+                text3.startAnimation(fab_close);
+                text4.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab4.setClickable(false);
                 isOpen = false;
+
 
                 Intent intent = new Intent(MainActivity.this, GraphActivity.class);
 
@@ -128,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
                 fab2_share.setClickable(false);
                 fab1_mail.setClickable(false);
                 isOpen = false;
+                text4.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab4.setClickable(false);
+                fab3_flect.setClickable(false);
+                fab3_flect.startAnimation(fab_close);
+                text3.startAnimation(fab_close);
 
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.setContentView(R.layout.add_dialog_layout);
@@ -179,6 +264,20 @@ public class MainActivity extends AppCompatActivity {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, xVals, yVals, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        TextView text = findViewById(R.id.textView);
+
+        if(xVals.size() > 0){
+
+            text.setText("");
+
+        }
+        else {
+
+            text.setText("No se han registrado cargas.");
+
+        }
+
     }
     
     private ArrayList<ValHolder> getHolders(){
@@ -206,14 +305,119 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "holders generated");
 
-        for (ValHolder holder:finalList) {
-
-
-
-        }
 
         return finalList;
         
+    }
+
+    private ArrayList<EquationHolder> getEquations2(int size){
+        ArrayList<ValHolder> values = getPlottingHolders(size);
+
+        ArrayList<EquationHolder> finalValues = new ArrayList<>();
+
+        Double m = 0.0;
+
+        int i = 0;
+
+        Double prevY = 0.0;
+
+        while(i+1 < values.size()){
+
+            ValHolder val1 = values.get(i);
+            ValHolder val2 = values.get(i+1);
+
+            m += val1.getVal();
+
+            Double b = m*val1.getPos();
+
+            Double y = m*val2.getPos() - b;
+
+            Double finalY = y + prevY;
+
+
+            Double x1 = val1.getPos();
+            Double x2 = val2.getPos();
+
+            Double finalM = (finalY-prevY)/(x2-x1);
+            Double finalB = finalY - finalM*x2;
+            finalM *= -1;
+            finalB *= -1;
+
+            String eq = finalM.toString()+"x+"+finalB.toString();
+
+            Log.d("Equation #", ""+i);
+            Log.d("X1, Y1", x1+","+prevY);
+            Log.d("X1, Y2", x2+","+finalY);
+
+            Log.d("Equation: ", eq);
+            prevY = finalY;
+
+
+            EquationHolder equationHolder = new EquationHolder(x1, x2, eq);
+
+            finalValues.add(equationHolder);
+
+
+            i++;
+
+            Log.d("Equation", finalM+"x-"+finalB);
+
+        }
+
+
+        return finalValues;
+
+
+    }
+
+    private ArrayList<ValHolder> getSecondPlottingHolders(int size){
+
+        ArrayList<ValHolder> values = getPlottingHolders(size);
+
+        ArrayList<ValHolder> finalValues = new ArrayList<>();
+
+        Double m = 0.0;
+
+        int i = 0;
+
+        Double prevY = 0.0;
+
+        finalValues.add(new ValHolder(0,0));
+
+        while(i+1 < values.size()){
+
+            ValHolder val1 = values.get(i);
+            ValHolder val2 = values.get(i+1);
+
+            m += val1.getVal();
+
+            Double b = m*val1.getPos();
+
+            Double y = m*val2.getPos() - b;
+            Log.d("Prev Y", prevY.toString());
+
+
+            Double finalY = y + prevY;
+
+            prevY = finalY;
+
+
+            Log.d("Y", y.toString());
+            Log.d("Final Y", finalY.toString());
+
+
+            Double x = val2.getPos();
+
+            finalValues.add(new ValHolder(-1*finalY,x));
+
+            i++;
+
+            Log.d("Equation", m+"x-"+b);
+
+        }
+
+
+        return finalValues;
     }
 
     private ArrayList<ValHolder> getPlottingHolders(int size){

@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/graphLayout"
         android:text="Ecuaciones"
+        android:id="@+id/ecuaciones"
         android:textAlignment="center"
         android:textSize="32dp" />
 </RelativeLayout>
