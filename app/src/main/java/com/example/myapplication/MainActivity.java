@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textview_mail, textview_share, text3, text4;
 
 
-    Integer beamSize = 0;
+    Integer beamSize = -1;
     Boolean isOpen = false;
 
 
@@ -82,6 +83,61 @@ public class MainActivity extends AppCompatActivity {
         textview_share = findViewById(R.id.textview_share);
         text3 = findViewById(R.id.textview_share3);
         text4 = findViewById(R.id.textview_mail2);
+
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                textview_mail.startAnimation(fab_close);
+                textview_share.startAnimation(fab_close);
+                fab2_share.startAnimation(fab_close);
+                fab1_mail.startAnimation(fab_close);
+                fab_main.startAnimation(fab_anticlock);
+                fab2_share.setClickable(false);
+                fab1_mail.setClickable(false);
+                isOpen = false;
+                text4.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab4.setClickable(false);
+                fab3_flect.setClickable(false);
+                fab3_flect.startAnimation(fab_close);
+                text3.startAnimation(fab_close);
+
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.size_layout);
+
+                Window window = dialog.getWindow();
+                window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                Button addButton = dialog.findViewById(R.id.puntualButton);
+                xEdit = dialog.findViewById(R.id.xAdd);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(xEdit.getText().toString().isEmpty()){
+
+                            xEdit.setHint("Por favor agregue un valor válido");
+                            return;
+
+                        }
+
+                        beamSize = Integer.valueOf(xEdit.getText().toString());
+
+                        dialog.cancel();
+
+                    }
+                });
+
+                dialog.show();
+
+
+            }
+        });
+
+
 
         fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,12 +199,19 @@ public class MainActivity extends AppCompatActivity {
                 fab4.setClickable(false);
                 isOpen = false;
 
+                if(beamSize == -1){
+
+                    Toast.makeText(MainActivity.this, "No ha colocado el tamaño de la viga", Toast.LENGTH_LONG).show();
+                    return;
+
+                }
+
                 Intent intent = new Intent(MainActivity.this, GraphActivity.class);
 
 
-                String jsonVals = new Gson().toJson(getSecondPlottingHolders(8));
+                String jsonVals = new Gson().toJson(getSecondPlottingHolders(beamSize));
 
-                String jsonEq = new Gson().toJson(getEquations2(8));
+                String jsonEq = new Gson().toJson(getEquations2(beamSize));
 
                 intent.putExtra("values", jsonVals);
                 intent.putExtra("equations", jsonEq);
@@ -182,12 +245,24 @@ public class MainActivity extends AppCompatActivity {
                 isOpen = false;
 
 
+
+                if(beamSize == -1){
+
+                    Toast.makeText(MainActivity.this, "No ha colocado el tamaño de la viga", Toast.LENGTH_LONG).show();
+                    return;
+
+                }
+
                 Intent intent = new Intent(MainActivity.this, GraphActivity.class);
 
 
-                String jsonVals = new Gson().toJson(transformPlottingHolders(8));
+                String jsonVals = new Gson().toJson(transformPlottingHolders(beamSize));
+
+                String jsonEq = new Gson().toJson(getEquations(beamSize));
 
                 intent.putExtra("values", jsonVals);
+
+                intent.putExtra("equations", jsonEq);
 
                 startActivity(intent);
 
@@ -308,6 +383,44 @@ public class MainActivity extends AppCompatActivity {
 
         return finalList;
         
+    }
+
+    private ArrayList<EquationHolder> getEquations(int size){
+
+
+        ArrayList<ValHolder> values = getPlottingHolders(size);
+
+        ArrayList<EquationHolder> finalValues = new ArrayList<>();
+
+        Double m = 0.0;
+
+        int i = 0;
+
+        Double prevY = 0.0;
+
+        while(i+1 < values.size()){
+
+            ValHolder val1 = values.get(i);
+            ValHolder val2 = values.get(i+1);
+
+            m += val1.getVal();
+
+            Double x1 = val1.getPos();
+            Double x2 = val2.getPos();
+
+
+            EquationHolder equationHolder = new EquationHolder(x1, x2, m.toString());
+
+            finalValues.add(equationHolder);
+
+
+            i++;
+
+        }
+
+
+        return finalValues;
+
     }
 
     private ArrayList<EquationHolder> getEquations2(int size){
