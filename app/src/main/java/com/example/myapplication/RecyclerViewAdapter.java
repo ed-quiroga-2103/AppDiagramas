@@ -57,11 +57,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-        holder.xVal.setText(mxVals.get(position));
-        holder.yVal.setText(myVals.get(position));
+        holder.xVal.setText("Pos. X: " + mxVals.get(position).toString());
+        holder.yVal.setText("Fuerza: " + myVals.get(position).toString());
 
 
-        if(Integer.valueOf(holder.yVal.getText().toString()) < 0){
+
+        if(Integer.valueOf(myVals.get(position)) > 0){
 
             holder.image.setImageResource(R.drawable.ic_arrow_down);
 
