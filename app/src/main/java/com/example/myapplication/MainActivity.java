@@ -52,14 +52,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        xVals.add("2");
-        xVals.add("4");
-        xVals.add("6");
-
-        yVals.add("10");
-        yVals.add("-20");
-        yVals.add("40");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
